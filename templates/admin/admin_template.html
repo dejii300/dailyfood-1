@@ -1,0 +1,107 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<br>
+
+<div class="row">
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title">Total-orders</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{total_orders}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title">Orders Delivered</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{delivered}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title">Orders Pending</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{pending}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a class="btn btn-sm btn-info"  href="{% url 'product_list' %}">Products</a>
+<a class="btn btn-sm btn-info"  href="{% url 'evtproduct_list' %}">Eventproducts</a>
+<a class="btn btn-sm btn-info"  href="{% url 'view_comments' %}">Comments</a>
+<a class="btn btn-sm btn-info"  href="{% url 'delivery-list' %}">delivery</a>
+<div class="row">
+    <div class="col-md-5">
+        <h5>Events</h5>
+        <hr>
+        <div class="card card-body">
+            <a class="btn btn-primary btn-sm btn-block" href="">Orders date</a>
+            <table class=" table table-sm">
+                <tr>
+                    <th></th>
+                    
+                    <th>username</th>
+                    <th>phone</th>
+                    <th>Status</th>
+                </tr>
+                {% for event in events %}
+                    <tr>
+                        <td><a class="btn btn-sm btn-info"  href="">View</a></td>
+                        <td>{{customer.name}}</td>
+                        <td>{{customer.phone}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <h5>ORDERS</h5>
+        <hr>
+        <div class="card card-body">
+            <a class="btn btn-primary btn-sm btn-block" href="">Orders date</a>
+            
+            <table class=" table table-sm">
+                <tr>
+                    <th></th>
+                    <th>username</th>
+                    <th>phone</th>
+                    <th>Status</th>
+                    
+                    
+                </tr>
+                {% for order in orders %}
+                    <tr>
+                        <td><a class="btn btn-sm btn-info"  href="{% url 'admin_user_orders' %}">View</a></td>
+                        <td>{{order.product}}</td>
+                        <td>{{order.date_ordered}}</td>
+                        <td>{{order.status}}</td>
+
+                        
+
+                    </tr>
+                {% endfor %}    
+            </table>
+        </div>
+
+    </div>
+</div>
+</html>
+{% endblock %}

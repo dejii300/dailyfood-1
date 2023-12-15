@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+    <title>Checkout</title>
+</head>
+<body>
+  <form>
+    <p><a href="{% url 'review_page' event_id=event.id %}">&#8592; Back</a></p>
+    <h2>Checkout</h2>
+    <p>Event: {{ event }}</p>
+
+    <h3>Selected Products:</h3>
+    <table class="table_b">
+        <thead>
+            <tr>
+                <th>Chops</th>
+                <th>Guests</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in event_items %}
+                <tr>
+                    <td>{{ item.chops.name }}</td>
+                    <td>{{ item.guest }}</td>
+                    <td>{{ item.evtproduct.price }}</td>
+                    <td>{{ item.total }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total Amount: {{ total_sum }}</p>
+
+    <h2>Payment</h2>
+    <!-- Add payment form or integration with a payment gateway as needed -->
+
+    <button type="submit" class="button_b">Proceed with Payment</button>
+
+    <!-- Add other elements or styling as needed -->
+</form>
+</body>
+</html>

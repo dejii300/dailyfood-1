@@ -1,0 +1,35 @@
+{% extends "chops/base.html" %}
+
+
+{% block content %}
+
+
+
+<section class="section section-md bg-default">
+    <div class="container">
+      <h3 class="oh-desktop"><span class="d-inline-block wow slideInUp">Select Delicious Chops</span></h3>
+      <div class="row row-d row-30">
+        <div class="col-sm-6 col-lg-4">
+          
+            <!-- Product-->
+            {% for product in products %}
+            <article class="product wow fadeInLeft" data-wow-delay=".15s">
+              <div class="product-figure" ><img src="{{product.imageURL}}" alt="product_image" width="300" height="300"/>
+              </div>
+              <div class="product-rating"><span class="mdi mdi-star"></span><span class="mdi mdi-star"></span><span class="mdi mdi-star"></span><span class="mdi mdi-star"></span><span class="mdi mdi-star text-gray-13"></span>
+              </div>
+              <h6 class="product-title">{{product.name}}</h6>
+              <div class="product-price-wrap">
+                <div class="product-price">₦{{product.price|floatformat:2}}</div>
+              </div>
+              <div class="product-button">
+                <div class="button-wrap"><a  data-product={{product.id}} data-action="add" class="button button-xs button-primary button-winona update-cart" >Add to cart</a></div>
+                <div class="button-wrap"><a class="button button-xs button-secondary button-winona" href="{% url 'chopsdetail' product.id %}">View Product</a></div>
+              </div>
+            </article>
+            {% endfor %} 
+          </div>
+       </div>
+    </div>
+  </section>
+  {% endblock %}

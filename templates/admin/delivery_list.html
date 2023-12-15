@@ -1,0 +1,17 @@
+{% extends 'admin/base.html' %}
+    
+{% block content %}
+    <p><a href="{% url 'home' %}">&#8592; Back</a></p>
+    <h2>Delivery List</h2>
+    <td><a class="btn btn-sm btn-info"  href="{% url 'delivery-add'  %}">create</a></td>
+    <ul>
+        {% for delivery in deliveries %}
+        
+            <li>{{ delivery.location }} - {{ delivery.price }}</li>
+           
+            <td><a class="btn btn-sm btn-info"  href="{% url 'delivery-update' delivery.pk %}">update</a></td>
+            <td><a class="btn btn-sm btn-info"  href="{% url 'delivery-delete' delivery.pk %}">delete</a></td>
+            {% endfor %}
+    </ul>
+
+{% endblock %}

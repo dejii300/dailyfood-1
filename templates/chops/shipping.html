@@ -1,0 +1,19 @@
+{% extends 'chops/base.html' %}
+
+{% block content %}
+  <h2>Select Delivery Location</h2>
+
+  <form method="post" action="{% url 'shipping_view' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Continue to Checkout</button>
+  </form>
+
+  <h3>Available Delivery Locations</h3>
+  <ul>
+    {% for location in delivery_locations %}
+      <li>{{ location.name }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

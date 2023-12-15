@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <p><a href="{% url 'home' %}">&#8592; Back</a></p>
+    <h2>Comments for Approval</h2>
+    {% for comment in comments %}
+       <a class="btn btn-sm btn-danger"  href="{% url 'delete_comment' comment.pk %}">delete</a>
+        <p>{{ comment.user.username }} - {{ comment.timestamp }} - {{ comment.content }}</p>
+        <a href="{% url 'approve_comment' comment.id %}">Approve</a>
+    {% endfor %}
+{% endblock %}

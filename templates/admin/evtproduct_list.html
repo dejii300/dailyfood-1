@@ -1,0 +1,20 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block content %}
+<p><a href="{% url 'home' %}">&#8592; Back</a></p>
+<br>
+<a class="btn btn-sm btn-info"  href="{% url 'evtproduct_create' %}">create evtproducts</a>
+<hr>
+<h2>EvtProduct List</h2>
+<table class=" table table-sm">
+  <tr>
+  <td><ul>
+    {% for evtproduct in evtproducts %}
+    <a class="btn btn-sm btn-danger"  href="{% url 'evtproduct_delete' evtproduct.id %}">delete</a>
+      <li><a href="{% url 'evtproduct_detail' evtproduct.pk %}">{{ evtproduct.name }}</a></li>
+    {% endfor %}
+  </ul></td>
+  </tr>
+{% endblock %}
+</table>

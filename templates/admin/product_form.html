@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<p><a href="{% url 'product_list' %}">&#8592; Back</a></p>
+<h2>{% if form.instance.pk %}Update{% else %}Create{% endif %} Product</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+
+{% endblock %}  

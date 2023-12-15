@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+   
+    <div class="profile-container">
+        <p class="back-to-profile"><a href="{% url 'index' %}"></i>&#8592; Back</a></p>
+        <div class="profile-header">
+            <h3>Profile</h3>
+        </div>
+        <hr>
+        <div class="profile-content">
+            <div class="profile-image">
+                <!-- Add user profile image here -->
+                <a href="{{request.user.customer.profile.pic.url}}"><img src="{{ request.user.customer.profile_pic.url }}" id="profile-image"></a>
+            </div>
+            <div class="profile-details">
+                <h4>{{ user.username }}</h4>
+                <!-- Add other user details here, e.g., name, email, etc. -->
+                <p>Email: {{ user.customer.email }}</p>
+                <p>Phone Number: {{ user.customer.phone }}</p>
+                <p>Address: {{ user.customer.address }}</p>
+                <!-- Add more profile details as needed -->
+            </div>
+        </div>
+        <div class="profile-actions">
+            <!-- Add buttons or links for profile actions, e.g., edit profile, change password, etc. -->
+            <a href="{% url 'edit_profile' %}">Edit Profile</a>
+            <a href="{% url 'change_password' %}">Change Password</a>
+            <!-- Add more actions as needed -->
+        </div>
+    </div>
+</body>
+</html>

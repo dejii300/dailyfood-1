@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<p><a href="{% url 'home' %}">&#8592; Back</a></p>
+  <h2>Customer Messages List</h2>
+  <ul>
+    {% for customer_message in customer_messages %}
+      <li><a href="{% url 'reply' pk=reply.pk %}">{{ customer_message.sender.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
