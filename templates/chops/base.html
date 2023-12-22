@@ -76,8 +76,16 @@
                   <!-- RD Navbar Toggle-->
                   <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
                   <!-- RD Navbar Brand-->
-                  <div class="rd-navbar-brand"><a class="brand" href="{% url 'index'%}"><img class="brand-logo-dark" src="{% static 'images/logo/Logo1.png' %}" alt="" width="198" height="66"/></a></div>
+                  <div class="rd-navbar-brand"><a  href="{% url 'index'%}"><img class="brand-logo-dark" src="{% static 'images/logo/Logo1.png' %}" alt="" width="198" height="66"/></a></div>
+                  
+                      <a   href="{% url 'cart' %}">
+                        <img class="img_logo" id="cart-icon" src="{% static 'images/index/cart.png' %}">
+                      </a>
+                          <p class="pi" id="cart-total">{{cartItems}}</p>
+                      
                 </div>
+
+                
                 <div class="rd-navbar-right rd-navbar-nav-wrap">
                   <div class="rd-navbar-aside">
                     <ul class="rd-navbar-contacts-2">
@@ -112,13 +120,13 @@
                               <div class="dropdown-c">
                                   <!-- Dropdown items go here -->
                                   <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-                                  <a class="dropdown-item" href="">Orders </a>
+                                  <a class="dropdown-item" href="{% url 'user_order' %}">Orders </a>
                                   <a class="dropdown-item" href="{% url 'profile' %}">profile</a>
                                   <!-- Add more dropdown items as needed -->
                               </div>
                           </li>
                           
-                          <li class="rd-nav-item"><a class="rd-nav-link" href="typography.html">About-us</a></li>
+                          <li class="rd-nav-item"><a class="rd-nav-link" href="{% url 'aboutus'%}">About-us</a></li>
                           <li class="rd-nav-item" id="categoryDropdown">
                             <a class="rd-nav-link" href="#">Category <span class="dropdown-arrow"></span></a>
                             
@@ -162,6 +170,7 @@
           
         </ul>
       </nav>
+      
   {% block content %}
 
  <!-- Swiper-->

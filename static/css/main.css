@@ -57,6 +57,12 @@ h1,h2,h3,h4,h5,h6{
 	border-radius: 0;
 }
 
+.btn-danger{
+	background-color: red;
+	border-radius: 10px;
+	margin: auto;
+}
+
 .row-image{
 	width: 100px;
 }

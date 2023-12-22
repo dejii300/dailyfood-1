@@ -1,19 +1,28 @@
-{% extends 'chops/base.html' %}
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+    <title>Delivery form</title>
 
-{% block content %}
-  <h2>Select Delivery Location</h2>
+      
 
-  <form method="post" action="{% url 'shipping_view' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
+      <form method="post" action="{% url 'shipping_view' %}">
+        <p><a href="{% url 'cart' %}">&#8592; Back</a></p>
+        <h2> Delivery Address</h2>
+        {% csrf_token %}
+        {{ form.as_p }}
 
-    <button type="submit">Continue to Checkout</button>
-  </form>
+        <button type="submit">Continue to Checkout</button>
+      </form>
 
-  <h3>Available Delivery Locations</h3>
-  <ul>
-    {% for location in delivery_locations %}
-      <li>{{ location.name }}</li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+      
+      <ul>
+        {% for location in delivery_locations %}
+          <li>{{ location.name }}</li>
+        {% endfor %}
+      </ul>
+</head>
+</html>

@@ -1,0 +1,155 @@
+
+/* adin css */
+body, h1, h2, p, ul, li {
+	margin: 0;
+	padding: 0;
+  }
+  
+  body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+  }
+  
+  .container {
+	max-width: 800px;
+	margin:  auto;
+  }
+  
+  h2 {
+	color: #333;
+  }
+  
+  form {
+	margin-top: 20px;
+  }
+  
+  form table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+  }
+  
+  form th, form td {
+	border: 1px solid #ddd;
+	padding: 10px;
+  }
+  
+  button {
+	background-color: #3498db;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-right: 10px;
+  }
+  
+  a {
+	text-decoration: none;
+	color: #3498db;
+  }
+
+  /* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styling for the product list */
+h2 {
+    color: #333;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+/* Styling for the product detail */
+.product-detail {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.product-detail h2 {
+    color: #333;
+}
+
+.product-detail p {
+    color: #555;
+}
+
+/* Styling for the product form */
+.product-form {
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.product-form h2 {
+    color: #333;
+}
+
+.product-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-form label {
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.product-form input,
+.product-form textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.product-form button {
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-form button:hover {
+    background-color: #2980b9;
+}
+
+/* Styling for the product delete confirmation */
+.product-delete {
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.product-delete h2 {
+    color: #333;
+}
+
+.product-delete p {
+    color: #555;
+}
+
+.product-delete form {
+    margin-top: 15px;
+}
+
+.product-delete form button {
+    padding: 10px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-delete form button:hover {
+    background-color: #c0392b;
+}

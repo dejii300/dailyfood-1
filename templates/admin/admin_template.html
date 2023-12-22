@@ -4,7 +4,6 @@
 {% block content %}
 
 <br>
-
 <div class="row">
     <div class="col">
         <div class="col-md">
@@ -14,6 +13,33 @@
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">{{total_orders}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title">Orders Processing</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{processing}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title">Orders out for delivery </h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{out_for_delivery}}</h3>
                 </div>
             </div>
         </div>
@@ -30,18 +56,7 @@
             </div>
         </div>
     </div>
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-3" id="total-orders">
-                <div class="card-header">
-                    <h5 class="card-title">Orders Pending</h5>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title">{{pending}}</h3>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 <a class="btn btn-sm btn-info"  href="{% url 'product_list' %}">Products</a>
 <a class="btn btn-sm btn-info"  href="{% url 'evtproduct_list' %}">Eventproducts</a>
@@ -52,7 +67,7 @@
         <h5>Events</h5>
         <hr>
         <div class="card card-body">
-            <a class="btn btn-primary btn-sm btn-block" href="">Orders date</a>
+            <a class="btn btn-primary btn-sm btn-block" href="">Event Orders</a>
             <table class=" table table-sm">
                 <tr>
                     <th></th>
@@ -64,8 +79,8 @@
                 {% for event in events %}
                     <tr>
                         <td><a class="btn btn-sm btn-info"  href="">View</a></td>
-                        <td>{{customer.name}}</td>
-                        <td>{{customer.phone}}</td>
+                        <td>{{event.customer.name}}</td>
+                        <td>{{event.customer.phone}}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -76,32 +91,92 @@
         <h5>ORDERS</h5>
         <hr>
         <div class="card card-body">
-            <a class="btn btn-primary btn-sm btn-block" href="">Orders date</a>
+            <a class="btn btn-primary btn-sm btn-block" href="">Orders</a>
             
             <table class=" table table-sm">
                 <tr>
                     <th></th>
                     <th>username</th>
-                    <th>phone</th>
                     <th>Status</th>
                     
                     
                 </tr>
                 {% for order in orders %}
+                {% if order.complete %}
                     <tr>
-                        <td><a class="btn btn-sm btn-info"  href="{% url 'admin_user_orders' %}">View</a></td>
-                        <td>{{order.product}}</td>
-                        <td>{{order.date_ordered}}</td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'update_order' order_id=order.id  %}">View</a></td>
+                        <td>{{order.customer.name}}</td>
                         <td>{{order.status}}</td>
 
                         
 
                     </tr>
-                {% endfor %}    
-            </table>
+                {% endif %}
+                {% endfor %}   
+        </table>
         </div>
 
     </div>
 </div>
+
+
 </html>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Reload orders content without refreshing the entire page
+    function reloadOrders() {
+        $.ajax({
+            url: '{% url "home" %}',  // Update the URL to match your view name
+            type: 'GET',
+            dataType: 'html',
+            success: function(data) {
+                $('#orders-content').html($(data).find('#orders-content').html());
+            },
+            error: function(error) {
+                console.error('Error reloading orders:', error);
+            }
+        });
+    }
+
+    // Call reloadOrders() when the page loads
+    $(document).ready(function() {
+        reloadOrders();
+    });
+
+    // You can add similar functions for reloading other sections as needed
+</script>
+<script>
+    jQuery(document).ready(function($) {
+        function reloadOrders() {
+            $.ajax({
+                url: '{% url "home" %}',  // Update the URL to match your view name
+                type: 'GET',
+                dataType: 'html',
+                success: function(data) {
+                    // Assuming the server sends the orders grouped by date
+                    var currentDate = new Date().toLocaleDateString();
+                    $(data).find('.order-date').each(function() {
+                        var orderDate = $(this).text().trim();
+                        if (orderDate === currentDate) {
+                            $(this).closest('.order-container').show();
+                        } else {
+                            $(this).closest('.order-container').hide();
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error reloading orders:', error);
+                }
+            });
+        }
+
+        // Call reloadOrders() when the page loads
+        $(document).ready(function() {
+            reloadOrders();
+        });
+
+        // You can add similar functions for reloading other sections as needed
+    });
+</script>
+
 {% endblock %}

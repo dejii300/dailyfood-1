@@ -24,9 +24,9 @@
             <br>
             <div class="box-element">
                 <div class="cart-row">
-                    <div style="flex:1"></div>
+                    <div style="flex:2"></div>
                     <div style="flex:2"><strong>Item</strong></div>
-                    <div style="flex:1"><strong>Price</strong></div>
+                    <div style="flex:2"><strong>Price</strong></div>
                     <div style="flex:2"><strong>Quantity</strong></div>
                     <div style="flex:1"><strong>Total</strong></div>
                 </div>
@@ -34,7 +34,7 @@
                 {% for item in items %}
                 <div class="cart-row">
                     <div style="flex:1"><img class="row-image" src="{{item.product.imageURL}}"></div>
-                    <button  data-product={{item.product.id}} data-action="delete" class="btn btn-danger px-3 update-cart ">
+                    <button  data-product={{item.product.id}} data-action="delete" class="btn-danger px-3 update-cart ">
                     <i class="fa fa-trash mr-1"></i> Delete
                     </button>
                     <div style="flex:2"><p>{{item.product.name}}</p></div>

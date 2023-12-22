@@ -79,7 +79,7 @@ class CustomerForm(ModelForm):
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['product', 'status']
+        fields = ['status']
 
 
 
@@ -112,14 +112,6 @@ class DeliveryForm(forms.ModelForm):
 class ShippingAddressForm(forms.ModelForm):
     class Meta:
         model = ShippingAddress
-        fields = ['address', 'phone1', 'phone2', 'selected_location']
+        fields = '__all__'
+        
 
-    address = forms.CharField(max_length=200, required=True)
-    phone1 = forms.CharField(max_length=200, required=True)
-    phone2 = forms.CharField(max_length=200, required=False)
-    
-    selected_location = forms.ModelChoiceField(
-        queryset=Delivery.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'}),
-        label='Select Delivery Location'
-    )

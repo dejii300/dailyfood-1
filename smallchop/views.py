@@ -118,13 +118,18 @@ def checkout(request):
 
     if not items:
         # Redirect or handle the case where the cart is empty
-        return redirect('')
+        return redirect('chops')
 
-    # Retrieve the delivery price associated with the customer
-    customer = Customer.objects.get(user=request.user)
-    delivery = Delivery.objects.filter(customer=customer).first()
-    delivery_price = delivery.price if delivery else 0  # Set a default if no delivery is found
-
+    try:
+        # Retrieve the delivery price associated with the customer's order
+        delivery_price = 0
+        if order.shippingaddress:
+            # Assuming there's a direct relationship between ShippingAddress and Delivery
+            delivery = order.shippingaddress.delivery
+            delivery_price = delivery.price if delivery else 0  # Set a default if no delivery is found
+    except ShippingAddress.DoesNotExist:
+        # Handle the case where the shipping address is not found
+        delivery_price = 0
     # Placeholder for updated_total; replace it with the actual calculation
     updated_total = order.get_cart_total + delivery_price
     print(f"update total : {updated_total}")
@@ -191,37 +196,31 @@ def updateItem(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def shipping_view(request):
-    
-    # Retrieve the current customer
-    customer = Customer.objects.get(user=request.user)
-
-    # Retrieve all delivery locations
-    delivery_locations = Delivery.objects.all()
+    data = cartData(request)
+    cartItems = data['cartItems']
+    items = data['items']
 
     if request.method == 'POST':
-        # Handle form submission
         form = ShippingAddressForm(request.POST)
         if form.is_valid():
-            # Get the selected delivery location and its price
-            selected_location = form.cleaned_data['selected_location']
-            delivery = Delivery.objects.get(location=selected_location)
+            # Get or create the customer's order
+            order, created = Order.objects.get_or_create(
+                customer=request.user.customer,
+                complete=False
+            )
 
-            # Associate the delivery with the current customer
-            delivery.customer = customer
-            delivery.save()
-
-            delivery_price = delivery.price
-            form.save()
-            print(f"Delivery Price: {delivery_price}")
+            # Save the shipping address and update the order
+            shippingaddress = form.save()
+            order.shippingaddress = shippingaddress
+            order.save()
 
             return redirect('checkout')
+
     else:
-        # Display the form with delivery location options
         form = ShippingAddressForm()
 
-    context = {'form': form, 'delivery_locations': delivery_locations, }
+    context = {'form': form, 'cartItems': cartItems, 'items': items}
     return render(request, 'chops/shipping.html', context)
-
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def processOrder(request):
@@ -342,25 +341,40 @@ def edit_profile(request):
 @login_required(login_url='login')
 @admin_only
 def adminD(request):
-    orders = Order.objects.all()
-    
+    orders = Order.objects.all().order_by('-date_ordered')
+    events = Event.objects.all()
     customers = Customer.objects.all()
     total_customers = customers.count()
-    total_orders = orders.count()
+    total_orders = orders.filter(complete=True).count()
+    processing = orders.filter(status='Processing').count()
+    out_for_delivery = orders.filter(status='Out_for_delivery').count()
     delivered = orders.filter(status='Delivered').count()
-    pending = orders.filter(status='Pending').count()
+    
     context = {
         'orders': orders, 'customers': customers, 'total_orders': total_orders, 'delivered': delivered,
-        'pending': pending, 'total_customer':total_customers
+        'processing': processing, 'total_customers':total_customers, 'out_for_delivery': out_for_delivery,
+        'events':events,
         }
 
     return render(request, 'admin/admin_template.html', context)
 
-   
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def orders_by_date(request):
+    selected_date_str = request.GET.get('date')
+    
+    if selected_date_str:
+        selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+        orders = Order.objects.filter(date_ordered__date=selected_date)
+    else:
+        orders = Order.objects.all()
+
+    context = {'orders': orders}
+    return render(request, 'admin/admin_template.html', context) 
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
-def userPage(request):
+def userOrder(request):
     orders = request.user.customer.order_set.all()
     total_orders = orders.count()
     delivered = orders.filter(status='Delivered').count()
@@ -383,9 +397,9 @@ def products(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
-def admin_user_orders(request):
-    orders = Order.objects.all()
-    return render(request, 'admin/admin_user_orders.html', {'orders': orders})
+def Events_details(request, event_id):
+    events = get_object_or_404(Event, id=event_id)
+    return render(request, 'admin/event_details.html', {'events': events})
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -401,48 +415,25 @@ def customer(request, pk_test):
     }
     return render(request, 'account/customer.html', context) 
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# def createproduct(request, pk):
-#     OrderFormSet = inlineformset_factory(Customer, Order, fields=('Product', 'status'), extra=20)
-    
-#     customer = Customer.objects.get(id=pk)
-#     formset = OrderFormSet( queryset=Order.objects.none(), instance=customer)
-#     #form = OrderForm()
-#     if request.method == 'POST':
-#        # form = OrderForm(request.POST)
-#        formset = OrderFormSet(request.POST, instance=customer)
-#        if formset.is_valid():
-#             formset.save()
-#             return redirect('/')
-#     context = {'formset': formset}    
-#     return render(request, 'account/order_form.html',context)
-  
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# def updateproduct(request, pk):
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def updateOrder(request, order_id):
  
-#     order = Order.objects.get(id=pk)
-#     formset = OrderForm( instance=order)
+    order = get_object_or_404(Order, id=order_id)
 
-#     if request.method =='POST':
-#         formset = OrderForm(request.POST, instance=order)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect('/')
-#     context = {'formset': formset}
-#     return render(request, 'account/order_form.html', context)
+    
+    formset = OrderForm( instance=order)
+    
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# def deleteproduct(request, pk):
-#     order = Order.objects.get(id=pk)
-#     if request.method == 'POST':
-#         order.delete()   
-#         return redirect('/') 
-#     context = {'item': order}  
-#     return render(request, 'account/delete_form.html', context)    
+    if request.method =='POST':
+        formset = OrderForm(request.POST, instance=order)
+        if formset.is_valid():
+            formset.save()
+            return redirect('update_order', order_id=order_id)
+    context = {'formset': formset, 'order':order, }
+    return render(request, 'admin/order_form.html', context)
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -531,10 +522,10 @@ def evtproduct_update(request, pk):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def evtproduct_delete(request, pk):
-    evtproduct = get_object_or_404(Product, pk=pk)
+    evtproduct = get_object_or_404(EvtProduct, pk=pk)
     if request.method == 'POST':
         evtproduct.delete()
-        return redirect('product_list')
+        return redirect('evtproduct_list')
     return render(request, 'admin/evtproduct_confirm_delete.html', {'evtproduct': evtproduct})
 
 
@@ -721,3 +712,12 @@ def delivery_delete(request, pk):
         delivery.delete()
         return redirect('delivery-list')
     return render(request, 'admin/delivery_confirm_delete.html', {'delivery': delivery})
+
+
+def AboutUs(request):
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    context = {'cartItems': cartItems, 'items': items }
+    return render(request, 'chops/about-us.html', context)

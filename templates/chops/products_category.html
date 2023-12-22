@@ -7,14 +7,14 @@
 
 <section class="section section-lg bg-default">
     <div class="container">
-        <p><a href="{% url 'chops' %}">&#8592; Back</a></p>
+    
       <h3 class="oh-desktop"><span class="d-inline-block wow slideInUp"></span>{{ Category }}</h3>
       <div class="row row-lg row-30">
-        <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="col-sm-6 col-g-4 col-xl-3">
           <!-- Product-->
           {% for product in products %}
           <article class="product wow fadeInLeft" data-wow-delay=".15s">
-            <div class="product-figure" ><img src="{{product.imageURL}}" alt="product_image" width="300" height="300"/>
+            <div class="product-figure" ><img class="img_products" src="{{product.imageURL}}" alt="product_image" width="300" height="300"/>
             </div>
             <div class="product-rating"><span class="mdi mdi-star"></span><span class="mdi mdi-star"></span><span class="mdi mdi-star"></span><span class="mdi mdi-star"></span><span class="mdi mdi-star text-gray-13"></span>
             </div>

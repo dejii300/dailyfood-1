@@ -2,6 +2,7 @@
 
 {% block content %}
     <p><a href="{% url 'home' %}">&#8592; Back</a></p>
+    <hr>
     <h2>Comments for Approval</h2>
     {% for comment in comments %}
        <a class="btn btn-sm btn-danger"  href="{% url 'delete_comment' comment.pk %}">delete</a>
